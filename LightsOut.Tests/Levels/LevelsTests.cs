@@ -12,10 +12,7 @@ namespace LightsOut.Tests
         [Test]
         public void ShouldConvertFromJson()
         {
-            var expected = A.Level()
-                .WithName("Level 0")
-                .WithColumns(4)
-                .WithRows(4)
+            var expected = A.Level("Level 0", 4, 4)
                 .WithOn(new[] { 0, 5, 10, 15 });
 
             var json = JsonObjectMother.Level0Json;

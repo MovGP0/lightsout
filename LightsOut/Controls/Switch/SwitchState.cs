@@ -2,9 +2,9 @@
 {
     public enum SwitchState
     {
-        On,
-        OnPressed,
-        Off,
-        OffPressed
+        Off = 0,
+        OffPressed = 1,
+        On = 2,
+        OnPressed = 3
     }
 }

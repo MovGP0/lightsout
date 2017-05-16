@@ -57,6 +57,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\LightsOutGame.xaml.cs">
+      <DependentUpon>LightsOutGame.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NotifyPropertyChanged.cs" />
     <Compile Include="Controls\Switch\ISwitch.cs" />
     <Compile Include="Controls\Switch\PressSwitchCommand.cs" />
     <Compile Include="Controls\Switch\Switch.xaml.cs">
@@ -72,6 +76,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\LightsOutGame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -82,6 +90,8 @@
     </Compile>
     <Compile Include="Levels\Level.cs" />
     <Compile Include="Levels\LevelsLoader.cs" />
+    <Compile Include="Levels\MatrixExtensions.cs" />
+    <Compile Include="Controls\LightsOutGameViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -92,6 +102,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
