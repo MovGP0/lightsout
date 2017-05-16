@@ -22,7 +22,7 @@ namespace LightsOut
             }
         }
 
-        public static async Task<string> DownloadFromUrlAsync(Uri uri, CancellationToken token)
+        private static async Task<string> DownloadFromUrlAsync(Uri uri, CancellationToken token)
         {
             using (var client = new HttpClient())
             {

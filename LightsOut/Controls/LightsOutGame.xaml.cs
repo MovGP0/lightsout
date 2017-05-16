@@ -57,15 +57,18 @@ namespace LightsOut
             PopulizeWithSwitches(grid, model.CurrentLevelState);
         }
 
-        private static void PopulizeWithSwitches(Panel panel, Level level)
+        private void PopulizeWithSwitches(Panel panel, Level level)
         {
             for (var row = 0; row < level.Rows; row++)
             for (var column = 0; column < level.Columns; column++)
             {
                 var @switch = new Switch
                 {
-                    State = level.OnMatrix[row, column]
+                    State = level.OnMatrix[row, column],
+                    Style = (Style)FindResource("SwitchStyle")
                 };
+                @switch.SetValue(Grid.RowProperty, row);
+                @switch.SetValue(Grid.ColumnProperty, column);
                 
                 panel.Children.Add(@switch);
             }

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Levels\JsonObjectMother.cs" />
+    <Compile Include="Levels\LevelsLoaderTest.cs" />
     <Compile Include="Levels\TestDataBuilder.cs" />
     <Compile Include="Levels\LevelsTests.cs" />
     <Compile Include="Levels\LevelTestDataBuilderExtensions.cs" />
