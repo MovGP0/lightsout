@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightsOut", "LightsOut\LightsOut.csproj", "{8A2FF832-B837-41B4-8A95-688EFF8F37DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightsOut.Tests", "LightsOut.Tests\LightsOut.Tests.csproj", "{CA744E42-9E29-4F48-9F72-376185DF67F6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A2FF832-B837-41B4-8A95-688EFF8F37DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A2FF832-B837-41B4-8A95-688EFF8F37DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A2FF832-B837-41B4-8A95-688EFF8F37DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A2FF832-B837-41B4-8A95-688EFF8F37DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA744E42-9E29-4F48-9F72-376185DF67F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA744E42-9E29-4F48-9F72-376185DF67F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA744E42-9E29-4F48-9F72-376185DF67F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA744E42-9E29-4F48-9F72-376185DF67F6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
