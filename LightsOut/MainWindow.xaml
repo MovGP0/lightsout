@@ -6,16 +6,17 @@
         xmlns:local="clr-namespace:LightsOut"
         mc:Ignorable="d"
         Title="MainWindow" Width="600" Height="600" Background="{StaticResource BackgroundBrush}">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
     <Grid>
-        <Grid x:Name="GameField">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <local:LightsOutGame Style="{StaticResource LightsOutGameStyle}" />
+            <Grid x:Name="GameField">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <local:LightsOutGame Style="{StaticResource LightsOutGameStyle}" />
+            </Grid>
         </Grid>
-        <!-- Bottom -->
-    </Grid>
+    </ScrollViewer>
 </Window>

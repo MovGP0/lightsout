@@ -25,7 +25,7 @@ namespace LightsOut
 
         private static IEnumerable<Level> GetDebugLevels()
         {
-            yield return new Level("Level 0", 3, 3, new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
+            yield return new Level("Level 0", 9, 9, new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
             yield return new Level("Level 1", 3, 3, new int[] { });
         }
 
