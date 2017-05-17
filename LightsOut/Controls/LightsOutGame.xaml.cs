@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 using MoreLinq;
 using Serilog;
 
@@ -12,6 +13,28 @@ namespace LightsOut
     public partial class LightsOutGame
     {
         private static ILogger Log => Serilog.Log.Logger.ForContext<LightsOutGame>();
+
+        #region DependencyProperties
+
+        public static DependencyProperty GameBackgroundProperty
+            = DependencyProperty.Register(nameof(GameBackground), typeof(Brush), typeof(LightsOutGame), new PropertyMetadata(Brushes.Transparent));
+
+        public Brush GameBackground
+        {
+            get => (Brush)GetValue(GameBackgroundProperty);
+            set => SetValue(GameBackgroundProperty, value);
+        }
+
+        public static DependencyProperty IsWonProperty
+            = DependencyProperty.Register(nameof(IsWon), typeof(bool), typeof(LightsOutGame), new PropertyMetadata(false));
+
+        public bool IsWon
+        {
+            get => (bool)GetValue(IsWonProperty);
+            set => SetValue(IsWonProperty, value);
+        }
+
+        #endregion
 
         public LightsOutGame()
         {
@@ -79,7 +102,7 @@ namespace LightsOut
         private void HandleSwitchViewModelCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             Log.Information("Handle switches changed");
-            
+
             var switches = GameGrid.Children.OfType<Switch>().ToArray();
             var oldItems = e.OldItems ?? new ReadOnlyCollection<SwitchViewModel>(new List<SwitchViewModel>());
             foreach (var item in oldItems)
@@ -88,10 +111,10 @@ namespace LightsOut
                 Log.Information($"Removing old switch at {switchViewModel.Position}");
 
                 var switchToRemove = switches.SingleOrDefault(s => s.Position.Equals(switchViewModel.Position));
-                if(switchToRemove == null) continue;
+                if (switchToRemove == null) continue;
                 GameGrid.Children.Remove(switchToRemove);
             }
-            
+
             var newItems = e.NewItems ?? new ReadOnlyCollection<SwitchViewModel>(new List<SwitchViewModel>());
             foreach (var item in newItems)
             {

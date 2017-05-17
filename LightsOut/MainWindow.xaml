@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LightsOut"
         mc:Ignorable="d"
-        Title="MainWindow" Width="600" Height="600" ResizeMode="NoResize">
+        Title="MainWindow" Width="600" Height="600" Background="{StaticResource BackgroundBrush}">
     <Grid>
         <Grid x:Name="GameField">
             <Grid.RowDefinitions>
@@ -14,7 +14,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <local:LightsOutGame Background="Aqua">
+            <local:LightsOutGame>
             </local:LightsOutGame>
         </Grid>
         <!-- Bottom -->

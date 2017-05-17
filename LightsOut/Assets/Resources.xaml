@@ -2,6 +2,22 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:lightsOut="clr-namespace:LightsOut">
 
+    <Color x:Key="BackgroundColor">#FF414042</Color>
+    <Color x:Key="ForegroundColor">#FFFFFFFF</Color>
+    <Color x:Key="ActiveGameBackgrundColor">#FFFF4848</Color>
+    <Color x:Key="WonGameBackgroundColor">#FF5ED16B</Color>
+    <Color x:Key="WonGameForegroundColor">#FF009344</Color>
+
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
+    <SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}" />
+    <SolidColorBrush x:Key="ActiveGameBackgrundBrush" Color="{StaticResource ActiveGameBackgrundColor}" />
+    <SolidColorBrush x:Key="WonGameBackgroundBrush" Color="{StaticResource WonGameBackgroundColor}" />
+    <SolidColorBrush x:Key="WonGameForegroundBrush" Color="{StaticResource WonGameForegroundColor}" />
+
+    <Style TargetType="{x:Type Control}" x:Key="FontSyle">
+        <Setter Property="FontSize" Value="600" />
+    </Style>
+
     <Viewbox x:Key="SwitchOff" Width="100.000" Height="100.000" x:Shared="false">
         <Canvas Width="100.000" Height="100.000">
             <Path Data="F1 M 100.000,100.000 L 0.000,100.000 L 0.000,0.000 L 100.000,0.000 L 100.000,100.000 Z"/>
@@ -79,6 +95,20 @@
             </Trigger>
             <Trigger Property="State" Value="OnPressed">
                 <Setter Property="Content" Value="{StaticResource SwitchPressed}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style x:Key="LightsOutGameStyle" TargetType="lightsOut:LightsOutGame">
+        <Setter Property="FontSize" Value="{StaticResource FontSize}"></Setter>
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsWon" Value="true">
+                <Setter Property="GameBackground" Value="{StaticResource WonGameBackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsWon" Value="false">
+                <Setter Property="GameBackground" Value="{StaticResource ActiveGameBackgrundBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
