@@ -186,6 +186,11 @@ namespace LightsOut
 
         private void HandleSwitchChanged(object sender, SwitchStateChangedEventArgs args)
         {
+            if (args.State == SwitchState.Off || args.State == SwitchState.On)
+            {
+                MoveCounter += 1;
+            }
+
             Set8PosSwitches(args.Position, args.State);
         }
     }
