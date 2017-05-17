@@ -106,11 +106,11 @@
         <Style.Triggers>
             <Trigger Property="IsWon" Value="true">
                 <Setter Property="GameBackground" Value="{StaticResource WonGameBackgroundBrush}" />
-                <Setter Property="WinMessageVisibility" Value="Collapsed" />
+                <Setter Property="WinMessageVisibility" Value="Visible" />
             </Trigger>
             <Trigger Property="IsWon" Value="false">
                 <Setter Property="GameBackground" Value="{StaticResource ActiveGameBackgrundBrush}" />
-                <Setter Property="WinMessageVisibility" Value="Visible" />
+                <Setter Property="WinMessageVisibility" Value="Collapsed" />
             </Trigger>
         </Style.Triggers>
     </Style>
