@@ -26,7 +26,7 @@
                     <Grid.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Grid.Background>
-                    <Button x:Name="NextLevelButton" Grid.Row="1" Grid.Column="0" Click="OnNextLevelButtonClick">
+                    <Button x:Name="NextLevelButton" Grid.Row="1" Grid.Column="0" Click="OnNextLevelButtonClick" BorderThickness="0" BorderBrush="{StaticResource WonGameBackgroundBrush}" Background="{StaticResource WonGameBackgroundBrush}">
                         <Border Background="{StaticResource WonGameBackgroundBrush}" Width="{Binding ElementName=GameGrid, Path=Width}" Padding="15">
                             <TextBlock TextAlignment="Center" HorizontalAlignment="Center"
                                    Text="YOU WIN THIS BATTLE…" FontSize="30" Foreground="{StaticResource WonGameForegroundBrush}" />
@@ -45,11 +45,13 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" FlowDirection="LeftToRight" HorizontalAlignment="Center" Orientation="Horizontal">
-                    <UserControl Content="{StaticResource Trophy}" />
-                    <TextBlock Padding="0,15,0,0" FontSize="60" TextAlignment="Right" Text="{Binding ViewModel.CurrentLevelNumber}" FontFamily="Source Sans Pro" />
-                </StackPanel>
-                <Button x:Name="ResetLevelButton" Grid.Column="1" Grid.Row="0" Background="{StaticResource BackgroundBrush}" Foreground="{StaticResource ForegroundBrush}" BorderThickness="0" BorderBrush="Transparent" Click="OnResetLevelButtonClick">
+                <Button x:Name="ResetGameButton" Grid.Column="0" Grid.Row="0" Style="{StaticResource MenuButtonStyle}" Click="OnResetGameButtonClick">
+                    <StackPanel VerticalAlignment="Center" FlowDirection="LeftToRight" HorizontalAlignment="Center" Orientation="Horizontal">
+                        <UserControl Content="{StaticResource Trophy}" />
+                        <TextBlock Padding="0,15,0,0" FontSize="60" TextAlignment="Right" Text="{Binding ViewModel.CurrentLevelNumber}" FontFamily="Source Sans Pro" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="ResetLevelButton" Grid.Column="1" Grid.Row="0" Style="{StaticResource MenuButtonStyle}" Click="OnResetLevelButtonClick">
                     <StackPanel VerticalAlignment="Center" FlowDirection="LeftToRight" HorizontalAlignment="Center" Orientation="Horizontal">
                         <UserControl Content="{StaticResource SwitchNeutral}" />
                         <TextBlock Padding="0,15,0,0" FontSize="60" TextAlignment="Right" Text="{Binding ViewModel.MoveCounter}" FontFamily="Source Sans Pro" />

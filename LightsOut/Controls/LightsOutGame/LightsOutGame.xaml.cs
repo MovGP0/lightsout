@@ -145,7 +145,12 @@ namespace LightsOut
 
         private void OnResetLevelButtonClick(object sender, RoutedEventArgs e)
         {
-            ViewModel?.Restart();
+            ViewModel?.ResetLevel();
+        }
+
+        private void OnResetGameButtonClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.ResetGame();
         }
     }
 }

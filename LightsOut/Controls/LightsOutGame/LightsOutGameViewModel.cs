@@ -218,7 +218,12 @@ namespace LightsOut
             throw new NotImplementedException();
         }
 
-        public void Restart()
+        public void ResetLevel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ResetGame()
         {
             throw new NotImplementedException();
         }
