@@ -11,7 +11,7 @@ namespace LightsOut
 {
     public partial class LightsOutGame
     {
-        private static ILogger Log => Serilog.Log.Logger;
+        private static ILogger Log => Serilog.Log.Logger.ForContext<LightsOutGame>();
 
         public LightsOutGame()
         {
@@ -30,7 +30,7 @@ namespace LightsOut
             if (e.OldValue is LightsOutGameViewModel oldModel)
             {
                 oldModel.PropertyChanged -= HandleViewModelPropertyChanged;
-                oldModel.Switches.CollectionChanged -= HandleSwitchViewModelCollectionChanged;
+                oldModel.SwitchViewModels.CollectionChanged -= HandleSwitchViewModelCollectionChanged;
             }
 
             if (e.NewValue is LightsOutGameViewModel viewModel)
@@ -42,7 +42,7 @@ namespace LightsOut
         private void SetupWithViewModel(LightsOutGameViewModel viewModel)
         {
             viewModel.PropertyChanged += HandleViewModelPropertyChanged;
-            viewModel.Switches.CollectionChanged += HandleSwitchViewModelCollectionChanged;
+            viewModel.SwitchViewModels.CollectionChanged += HandleSwitchViewModelCollectionChanged;
 
             viewModel.Levels.Clear();
             LevelsLoader.GetLevels().ForEach(viewModel.Levels.Add);
@@ -65,10 +65,6 @@ namespace LightsOut
         public void Initialize(LightsOutGameViewModel viewModel)
         {
             Log.Information("Initializing LightsOutGame");
-
-            var switches = GameGrid.Children.OfType<Switch>();
-            switches.ForEach(UnregisterSwitch);
-
             GameGrid.Children.Clear();
 
             viewModel.SetLevel(0);
@@ -93,7 +89,6 @@ namespace LightsOut
 
                 var switchToRemove = switches.SingleOrDefault(s => s.Position.Equals(switchViewModel.Position));
                 if(switchToRemove == null) continue;
-                UnregisterSwitch(switchToRemove);
                 GameGrid.Children.Remove(switchToRemove);
             }
             
@@ -104,24 +99,8 @@ namespace LightsOut
                 Log.Information($"Adding new switch at {switchViewModel.Position}");
 
                 var @switch = switchViewModel.CreateSwitch(FindResource);
-                RegisterSwitch(@switch);
                 GameGrid.Children.Add(@switch);
             }
-        }
-        
-        private void UnregisterSwitch(Switch @switch)
-        {
-            @switch.SwitchStateChanged -= HandleSwitchChanged;
-        }
-
-        private void RegisterSwitch(Switch @switch)
-        {
-            @switch.SwitchStateChanged += HandleSwitchChanged;
-        }
-
-        public void HandleSwitchChanged(object sender, SwitchStateChangedEventArgs args)
-        {
-            Log.Information("Handling switch change");
         }
     }
 }

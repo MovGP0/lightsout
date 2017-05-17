@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 using MoreLinq;
 using Serilog;
@@ -9,8 +12,8 @@ namespace LightsOut
 {
     public sealed class LightsOutGameViewModel : NotifyPropertyChanged
     {
-        private static ILogger Log => Serilog.Log.Logger;
-        public ObservableCollection<SwitchViewModel> Switches { get; } = new ObservableCollection<SwitchViewModel>();
+        private static ILogger Log => Serilog.Log.Logger.ForContext<LightsOutGameViewModel>();
+        public ObservableCollection<SwitchViewModel> SwitchViewModels { get; } = new ObservableCollection<SwitchViewModel>();
         public Collection<Level> Levels { get; } = new Collection<Level>();
 
         private int _moveCounter;
@@ -21,6 +24,24 @@ namespace LightsOut
         public LightsOutGameViewModel()
         {
             PropertyChanged += HandlePropertyChanged;
+            SwitchViewModels.CollectionChanged += HandleSwitchViewModelCollectionChanged;
+        }
+
+        private void HandleSwitchViewModelCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            var oldItems = e.OldItems ?? new List<SwitchViewModel>(0);
+            foreach (var oldItem in oldItems)
+            {
+                var svm = (SwitchViewModel)oldItem;
+                UnregisterSwitchViewModel(svm);
+            }
+
+            var newItems = e.NewItems ?? new List<SwitchViewModel>(0);
+            foreach (var newItem in newItems)
+            {
+                var svm = (SwitchViewModel)newItem;
+                RegisterSwitchViewModel(svm);
+            }
         }
 
         ~LightsOutGameViewModel()
@@ -95,7 +116,7 @@ namespace LightsOut
             Rows = currentLevel.Rows;
             Columns = currentLevel.Columns;
 
-            Switches.Clear();
+            SwitchViewModels.Clear();
 
             currentLevel.GetAllPositions().ForEach(pos =>
             {
@@ -104,7 +125,7 @@ namespace LightsOut
                     Position = pos, 
                     State = currentLevel[pos]
                 };
-                Switches.Add(switchViewModel);
+                SwitchViewModels.Add(switchViewModel);
             });
             
             MoveCounter = 0;
@@ -118,12 +139,12 @@ namespace LightsOut
 
             Log.Information($"Setting Level {number}");
 
-            Switches.Clear();
+            SwitchViewModels.Clear();
             var level = Levels[number];
             level.GetAllPositions().ForEach(position =>
             {
                 Log.Information("adding switch model");
-                Switches.Add(new SwitchViewModel
+                SwitchViewModels.Add(new SwitchViewModel
                 {
                     State = level[position], 
                     Position = position
@@ -132,6 +153,40 @@ namespace LightsOut
 
             Rows = level.Rows;
             Columns = level.Columns;
+        }
+
+        private void Set8PosSwitches(Position position, SwitchState state)
+        {
+            if(state == SwitchState.OffPressed || state == SwitchState.OnPressed) return;
+
+            Log.Information("Setting 8 Positions");
+            var positions = position.Get9Positions()
+                .Where(pos => pos.IsInBounds(Rows, Columns))
+                .Where(pos => pos != position);
+            
+            var switchViewModels = SwitchViewModels.Where(svm => positions.Contains(svm.Position));
+            switchViewModels.ForEach(svm =>
+            {
+                // temp. unregister event handler to prevent endless loop
+                UnregisterSwitchViewModel(svm);
+                svm.Switch8Position();
+                RegisterSwitchViewModel(svm);
+            });
+        }
+
+        private void UnregisterSwitchViewModel(SwitchViewModel @switch)
+        {
+            @switch.SwitchStateChanged -= HandleSwitchChanged;
+        }
+
+        private void RegisterSwitchViewModel(SwitchViewModel @switch)
+        {
+            @switch.SwitchStateChanged += HandleSwitchChanged;
+        }
+
+        private void HandleSwitchChanged(object sender, SwitchStateChangedEventArgs args)
+        {
+            Set8PosSwitches(args.Position, args.State);
         }
     }
 }

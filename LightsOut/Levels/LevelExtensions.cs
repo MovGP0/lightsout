@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using MoreLinq;
 
 namespace LightsOut
 {
@@ -23,61 +21,22 @@ namespace LightsOut
             }
         }
         
-        public static Level Switch8Positions(this Level level, Position position)
+        public static void Switch8Position(this SwitchViewModel viewModel)
         {
-            var newLevelState = level;
-            Get8Positions(position, level)
-                .ForEach(pos => newLevelState = Switch8Position(newLevelState, pos));
-            return newLevelState;
-        }
-
-        private static IEnumerable<Position> Get8Positions(Position position, Level level)
-        {
-            return Get9Grid(position)
-                .Where(pos => IsInBounds(level, pos))
-                .Where(pos => !IsCurrentPosition(pos, position));
-        }
-
-        private static Level Switch8Position(Level level, Position p)
-        {
-            var currentState = level[p];
+            var currentState = viewModel.State;
             switch (currentState)
             {
                 case SwitchState.OnPressed:
                 case SwitchState.Off:
-                    return level.SetSwitchState(SwitchState.On, p);
-
+                    viewModel.State = SwitchState.On;
+                    return;
                 case SwitchState.OffPressed:
                 case SwitchState.On:
-                    return level.SetSwitchState(SwitchState.Off, p);
-
+                    viewModel.State = SwitchState.Off;
+                    return;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-        }
-
-        private static bool IsCurrentPosition(Position position, Position current)
-        {
-            return position.Row == current.Row
-                   && position.Column == current.Column;
-        }
-
-        private static IEnumerable<Position> Get9Grid(Position position)
-        {
-            for (var r = position.Row - 1; r <= position.Row + 1; r++)
-            for (var c = position.Column - 1; c <= position.Column + 1; c++)
-            {
-                yield return new Position(r, c);
-            }
-        }
-
-        public static bool IsInBounds(this Level level, Position position)
-        {
-            return level != null
-                   && position.Row >= 0
-                   && position.Column >= 0
-                   && position.Row <= level.Rows
-                   && position.Column <= level.Columns;
         }
     }
 }

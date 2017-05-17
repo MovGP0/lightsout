@@ -6,7 +6,7 @@ namespace LightsOut
 {
     public sealed class LightsOutGameModel : NotifyPropertyChanged
     {
-        private static ILogger Log => Serilog.Log.Logger;
+        private static ILogger Log => Serilog.Log.Logger.ForContext<LightsOutGameModel>();
 
         #region Properties
         private Level _level;
@@ -50,28 +50,9 @@ namespace LightsOut
         }
         #endregion
 
+        [Obsolete("", true)]
         public void SetSwitch(SwitchState state, Position position)
         {
-            if (!Level.IsInBounds(position)) return;
-
-            Log.Information($"Setting switch at {position} from {Level[position]} to {state}");
-
-            switch (state)
-            {
-                case SwitchState.OffPressed:
-                case SwitchState.OnPressed:
-                    Level = Level.SetSwitchState(state, position);
-                    break;
-                case SwitchState.Off:
-                case SwitchState.On:
-                    Level = Level.SetSwitchState(state, position);
-                    Level = Level.Switch8Positions(position);
-                    ++MoveCounter;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
-            }
-
             IsWon = IsGameWon(Level);
         }
         

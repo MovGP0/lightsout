@@ -7,7 +7,7 @@ namespace LightsOut
 {
     public static class GridExtensions
     {
-        private static ILogger Log => Serilog.Log.Logger;
+        private static ILogger Log => Serilog.Log.Logger.ForContext<Grid>();
 
         public static void SetupColumnDefinitions(this Grid grid, int columns)
         {

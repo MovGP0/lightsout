@@ -1,7 +1,28 @@
-﻿namespace LightsOut
+﻿using System;
+using System.ComponentModel;
+using Serilog;
+
+namespace LightsOut
 {
     public sealed class SwitchViewModel : NotifyPropertyChanged, ISwitch
     {
+        private static ILogger Log => Serilog.Log.Logger.ForContext<SwitchViewModel>();
+
+        public event EventHandler<SwitchStateChangedEventArgs> SwitchStateChanged;
+
+        public SwitchViewModel()
+        {
+            PropertyChanged += HandlePropertyChanged;
+        }
+
+        private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(State))
+            {
+                SwitchStateChanged?.Invoke(this, new SwitchStateChangedEventArgs(Position, State));
+            }
+        }
+
         private Position _position;
         private SwitchState _state;
 
@@ -12,6 +33,8 @@
             {
                 if (value.Equals(_position)) return;
                 _position = value;
+
+                Log.Information("Position changed");
                 OnPropertyChanged();
             }
         }
@@ -23,6 +46,8 @@
             {
                 if (value == _state) return;
                 _state = value;
+
+                Log.Information("State changed");
                 OnPropertyChanged();
             }
         }

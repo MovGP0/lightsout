@@ -1,6 +1,6 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using Serilog;
 
@@ -8,26 +8,13 @@ namespace LightsOut
 {
     public partial class Switch
     {
-        private static ILogger Log => Serilog.Log.Logger;
+        private static ILogger Log => Serilog.Log.Logger.ForContext<Switch>();
 
         #region DependencyProperties
         public static readonly DependencyProperty StateProperty =
             DependencyProperty.Register(nameof(State), typeof(SwitchState), typeof(Switch),
-                new PropertyMetadata(SwitchState.Off, StatePropertyChangedCallback));
-
-        private static void StatePropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
-        {
-            if (dependencyObject is Switch @switch)
-            {
-                var oldValue = (SwitchState) args.OldValue;
-                var newValue = (SwitchState)args.NewValue;
-                var position = @switch.Position;
-
-                Log.Information($"Setting switch at {position} from {oldValue} to {newValue}");
-                @switch.SwitchStateChanged?.Invoke(@switch, new SwitchStateChangedEventArgs(position, newValue));
-            }
-        }
-
+                new PropertyMetadata(SwitchState.Off));
+        
         public SwitchState State
         {
             get => (SwitchState)GetValue(StateProperty);
@@ -49,37 +36,38 @@ namespace LightsOut
         {
             InitializeComponent();
             DataContextChanged += HandleDataContextChanged;
+            InitializeBindingsToViewModel(ViewModel);
         }
         
         private void HandleDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            BindingOperations.ClearBinding(this, StateProperty);
+            BindingOperations.ClearBinding(this, PositionProperty);
+
             if (e.OldValue is SwitchViewModel oldViewModel)
             {
-                oldViewModel.PropertyChanged -= HandleViewModelChanged;
             }
 
             if (e.NewValue is SwitchViewModel viewModel)
             {
-                Position = viewModel.Position;
-                viewModel.PropertyChanged += HandleViewModelChanged;
+                InitializeBindingsToViewModel(viewModel);
             }
         }
 
-        private void HandleViewModelChanged(object sender, PropertyChangedEventArgs e)
+        private void InitializeBindingsToViewModel<T>(T viewModel)
+            where T:ISwitch, INotifyPropertyChanged
         {
-            var viewModel = (SwitchViewModel)sender;
-            if (e.PropertyName == nameof(viewModel.Position))
-            {
-                Position = viewModel.Position;
-            }
+            if (viewModel == null) return;
+            Log.Information("Initializing Bindings");
 
-            if (e.PropertyName == nameof(viewModel.State))
-            {
-                State = viewModel.State;
-            }
+            Position = viewModel.Position;
+
+            var stateBinding = new Binding(nameof(viewModel.State)) {Mode = BindingMode.TwoWay};
+            SetBinding(StateProperty, stateBinding);
+
+            var positionBinding = new Binding(nameof(viewModel.Position)) {Mode = BindingMode.TwoWay};
+            SetBinding(PositionProperty, positionBinding);
         }
-
-        public event EventHandler<SwitchStateChangedEventArgs> SwitchStateChanged;
         
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
