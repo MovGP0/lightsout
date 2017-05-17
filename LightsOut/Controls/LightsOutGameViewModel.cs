@@ -1,16 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Input;
+using MoreLinq;
+using Serilog;
 
 namespace LightsOut
 {
     public sealed class LightsOutGameViewModel : NotifyPropertyChanged
     {
-        private Level _currentLevelState;
-        private ICollection<Level> _levels;
+        private static ILogger Log => Serilog.Log.Logger;
+        public ObservableCollection<SwitchViewModel> Switches { get; } = new ObservableCollection<SwitchViewModel>();
+        public Collection<Level> Levels { get; } = new Collection<Level>();
+
         private int _moveCounter;
-        private int _currentLevel;
+        private int _currentLevelNumber;
+        private int _columns;
+        private int _rows;
 
         public LightsOutGameViewModel()
         {
@@ -29,35 +35,14 @@ namespace LightsOut
                 Reset();
             }
         }
-
-        public ICollection<Level> Levels
-        {
-            get => _levels;
-            set
-            {
-                _levels = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Level CurrentLevelState
-        {
-            get => _currentLevelState;
-            set
-            {
-                if (_currentLevelState != null && _currentLevelState.Equals(value)) return;
-                _currentLevelState = value;
-                OnPropertyChanged();
-            }
-        }
         
-        public int CurrentLevel
+        public int CurrentLevelNumber
         {
-            get => _currentLevel;
+            get => _currentLevelNumber;
             set
             {
-                if (value == _currentLevel) return;
-                _currentLevel = value;
+                if (value == _currentLevelNumber) return;
+                _currentLevelNumber = value;
                 OnPropertyChanged();
             }
         }
@@ -73,14 +58,80 @@ namespace LightsOut
             }
         }
 
-        public ICommand MoveCommand { get; }
+        public int Rows
+        {
+            get => _rows;
+            private set
+            {
+                if (value == _rows) return;
+                _rows = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int Columns
+        {
+            get => _columns;
+            private set
+            {
+                if (value == _columns) return;
+                _columns = value;
+                OnPropertyChanged();
+            }
+        }
+        
         public ICommand RestartCommand { get; }
         
         private void Reset()
         {
-            CurrentLevelState = Levels.FirstOrDefault();
-            CurrentLevel = 0;
+            Log.Information("Resetting LightsOutGameViewModel");
+
+            if (CurrentLevelNumber+1 > Levels.Count)
+            {
+                CurrentLevelNumber = 0;
+            }
+
+            var currentLevel = Levels[CurrentLevelNumber];
+            Rows = currentLevel.Rows;
+            Columns = currentLevel.Columns;
+
+            Switches.Clear();
+
+            currentLevel.GetAllPositions().ForEach(pos =>
+            {
+                var switchViewModel = new SwitchViewModel
+                {
+                    Position = pos, 
+                    State = currentLevel[pos]
+                };
+                Switches.Add(switchViewModel);
+            });
+            
             MoveCounter = 0;
+        }
+
+        public void SetLevel(int number)
+        {
+            if(Levels.Count == 0) throw new InvalidOperationException("Levels not initialized");
+            if(number < 0) throw new ArgumentOutOfRangeException("Must not be negative.");
+            if(number >= Levels.Count) throw new ArgumentOutOfRangeException("Must not be greater that the number of loaded levels.");
+
+            Log.Information($"Setting Level {number}");
+
+            Switches.Clear();
+            var level = Levels[number];
+            level.GetAllPositions().ForEach(position =>
+            {
+                Log.Information("adding switch model");
+                Switches.Add(new SwitchViewModel
+                {
+                    State = level[position], 
+                    Position = position
+                });
+            });
+
+            Rows = level.Rows;
+            Columns = level.Columns;
         }
     }
 }

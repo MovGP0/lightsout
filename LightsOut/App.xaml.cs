@@ -10,6 +10,8 @@ namespace LightsOut
                 .MinimumLevel.Verbose()
                 .WriteTo.ColoredConsole()
                 .CreateLogger();
+
+            Log.Logger.Information("Logger Initialized");
         }
     }
 }

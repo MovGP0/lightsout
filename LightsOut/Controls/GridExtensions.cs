@@ -1,14 +1,18 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using MoreLinq;
+using Serilog;
 
 namespace LightsOut
 {
     public static class GridExtensions
     {
+        private static ILogger Log => Serilog.Log.Logger;
+
         public static void SetupColumnDefinitions(this Grid grid, int columns)
         {
+            Log.Information($"Setting up {columns} ColumnDefinitions.");
+
             grid.ColumnDefinitions.Clear();
             for (var column = 0; column < columns; column++)
             {
@@ -21,6 +25,8 @@ namespace LightsOut
 
         public static void SetupRowDefinitions(this Grid grid, int rows)
         {
+            Log.Information($"Setting up {rows} RowDefinitions.");
+
             grid.RowDefinitions.Clear();
             for (var row = 0; row < rows; row++)
             {
@@ -30,20 +36,19 @@ namespace LightsOut
                 });
             }
         }
-        
-        public static void PopulizeWithSwitches(this Panel panel, Level level, Func<string, object> findResource)
+
+        public static Switch CreateSwitch(this SwitchViewModel switchViewModel, Func<string, object> findResource)
         {
-            level.GetAllPositions().ForEach(pos =>
+            var @switch = new Switch
             {
-                var @switch = new Switch
-                {
-                    State = level[pos],
-                    Style = (Style)findResource("SwitchStyle")
-                };
-                @switch.SetValue(Grid.RowProperty, pos.Row);
-                @switch.SetValue(Grid.ColumnProperty, pos.Column);
-                panel.Children.Add(@switch);
-            });
+                Position = switchViewModel.Position,
+                State = switchViewModel.State,
+                Style = (Style)findResource("SwitchStyle")
+            };
+            @switch.SetValue(Grid.RowProperty, switchViewModel.Position.Row);
+            @switch.SetValue(Grid.ColumnProperty, switchViewModel.Position.Column);
+            @switch.ViewModel = switchViewModel;
+            return @switch;
         }
     }
 }

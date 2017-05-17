@@ -54,7 +54,7 @@ namespace LightsOut
         {
             if (!Level.IsInBounds(position)) return;
 
-            Log.Information($"Setting switch at ({position.Row}, {position.Column}) from {Level[position]} to {state}");
+            Log.Information($"Setting switch at {position} from {Level[position]} to {state}");
 
             switch (state)
             {

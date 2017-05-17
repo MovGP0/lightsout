@@ -1,11 +1,15 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using Serilog;
 
 namespace LightsOut
 {
-    public partial class Switch : ISwitch
+    public partial class Switch
     {
+        private static ILogger Log => Serilog.Log.Logger;
+
         #region DependencyProperties
         public static readonly DependencyProperty StateProperty =
             DependencyProperty.Register(nameof(State), typeof(SwitchState), typeof(Switch),
@@ -15,7 +19,12 @@ namespace LightsOut
         {
             if (dependencyObject is Switch @switch)
             {
-                @switch.SwitchStateChanged?.Invoke(@switch, new SwitchStateChangedEventArgs(@switch.Position, (SwitchState)args.NewValue));
+                var oldValue = (SwitchState) args.OldValue;
+                var newValue = (SwitchState)args.NewValue;
+                var position = @switch.Position;
+
+                Log.Information($"Setting switch at {position} from {oldValue} to {newValue}");
+                @switch.SwitchStateChanged?.Invoke(@switch, new SwitchStateChangedEventArgs(position, newValue));
             }
         }
 
@@ -36,24 +45,56 @@ namespace LightsOut
         }
         #endregion
 
-        public event EventHandler<SwitchStateChangedEventArgs> SwitchStateChanged;
-
         public Switch()
         {
             InitializeComponent();
+            DataContextChanged += HandleDataContextChanged;
+        }
+        
+        private void HandleDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue is SwitchViewModel oldViewModel)
+            {
+                oldViewModel.PropertyChanged -= HandleViewModelChanged;
+            }
+
+            if (e.NewValue is SwitchViewModel viewModel)
+            {
+                Position = viewModel.Position;
+                viewModel.PropertyChanged += HandleViewModelChanged;
+            }
         }
 
+        private void HandleViewModelChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var viewModel = (SwitchViewModel)sender;
+            if (e.PropertyName == nameof(viewModel.Position))
+            {
+                Position = viewModel.Position;
+            }
+
+            if (e.PropertyName == nameof(viewModel.State))
+            {
+                State = viewModel.State;
+            }
+        }
+
+        public event EventHandler<SwitchStateChangedEventArgs> SwitchStateChanged;
+        
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            PressSwitch.Execute(this);
+            ViewModel?.PressSwitch();
         }
 
         private void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
-            ReleaseSwitch.Execute(this);
+            ViewModel?.ReleaseSwitch();
         }
 
-        public PressSwitchCommand PressSwitch { get; } = new PressSwitchCommand();
-        public ReleaseSwitchCommand ReleaseSwitch { get; } = new ReleaseSwitchCommand();
+        public SwitchViewModel ViewModel
+        {
+            get => DataContext as SwitchViewModel;
+            set => DataContext = value;
+        }
     }
 }
