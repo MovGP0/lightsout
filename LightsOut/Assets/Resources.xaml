@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:lightsOut="clr-namespace:LightsOut">
 
-    <Viewbox x:Key="SwitchOff" Width="40.000" Height="40.000" x:Shared="false">
+    <Viewbox x:Key="SwitchOff" Width="100.000" Height="100.000" x:Shared="false">
         <Canvas Width="100.000" Height="100.000">
             <Path Data="F1 M 100.000,100.000 L 0.000,100.000 L 0.000,0.000 L 100.000,0.000 L 100.000,100.000 Z"/>
             <Path Fill="#ffffffff" Data="F1 M 58.134,21.655 L 31.163,21.655 L 31.163,78.345 L 58.134,78.345 L 58.134,21.655 Z"/>
@@ -16,7 +16,7 @@
         </Canvas>
     </Viewbox>
 
-    <Viewbox x:Key="SwitchOn" Width="40.000" Height="40.000" x:Shared="false">
+    <Viewbox x:Key="SwitchOn" Width="100.000" Height="100.000" x:Shared="false">
         <Canvas Width="100.000" Height="100.000">
             <Path Data="F1 M 100.000,100.000 L 0.000,100.000 L 0.000,0.000 L 100.000,0.000 L 100.000,100.000 Z"/>
             <Path Fill="#ffffffff" Data="F1 M 58.134,78.345 L 31.163,78.345 L 31.163,21.655 L 58.134,21.655 L 58.134,78.345 Z"/>
@@ -29,7 +29,7 @@
         </Canvas>
     </Viewbox>
 
-    <Viewbox x:Key="SwitchPressed" Width="40.000" Height="40.000" x:Shared="false">
+    <Viewbox x:Key="SwitchPressed" Width="100.000" Height="100.000" x:Shared="false">
         <Canvas Width="100.000" Height="100.000">
             <Path Data="F1 M 100.000,100.000 L 0.000,100.000 L 0.000,0.000 L 100.000,0.000 L 100.000,100.000 Z"/>
             <Path Fill="#ffffffff" Data="F1 M 58.134,21.655 L 31.163,21.655 L 31.163,78.345 L 58.134,78.345 L 58.134,21.655 Z"/>
@@ -65,8 +65,8 @@
     </Viewbox>
 
     <Style x:Key="SwitchStyle" TargetType="lightsOut:Switch">
-        <Setter Property="Width" Value="40" />
-        <Setter Property="Height" Value="40" />
+        <Setter Property="Width" Value="100" />
+        <Setter Property="Height" Value="100" />
         <Style.Triggers>
             <Trigger Property="State" Value="Off">
                 <Setter Property="Content" Value="{StaticResource SwitchOff}" />

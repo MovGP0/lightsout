@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LightsOut.Properties;
 
 namespace LightsOut
 {
     public sealed class Level
     {
+        #region Constructors
         public Level(string name, int rows, int columns, IEnumerable<int> on)
             : this(name, rows, columns)
         {
-            var onArray = on?.OrderBy(t => t).ToArray() 
+            var onArray = on?.OrderBy(t => t).ToArray()
                 ?? throw new ArgumentException(nameof(on));
 
-            if(onArray.Any(o => o < 0))
+            if (onArray.Any(o => o < 0))
                 throw new ArgumentOutOfRangeException(nameof(on));
 
             if (onArray.Any(o => o > columns * rows))
@@ -25,37 +27,41 @@ namespace LightsOut
                 onMatrix[item % columns, item / columns] = SwitchState.On;
             }
 
-            OnMatrix = onMatrix;
+            Matrix = onMatrix;
         }
 
-        internal Level(string name, int rows, int columns, SwitchState[,] onMatrix) : this(name, rows, columns)
+        internal Level(string name, int rows, int columns, SwitchState[,] matrix) : this(name, rows, columns)
         {
-            if(onMatrix.GetLength(0) != rows) throw new ArgumentException(nameof(rows));
-            if(onMatrix.GetLength(1) != columns) throw new ArgumentException(nameof(columns));
+            if (matrix.GetLength(0) != rows) throw new ArgumentException(nameof(rows));
+            if (matrix.GetLength(1) != columns) throw new ArgumentException(nameof(columns));
 
-            OnMatrix = onMatrix;
+            Matrix = matrix;
         }
 
         private Level(string name, int rows, int columns)
         {
             Name = name ?? throw new ArgumentException(nameof(name));
-            if (columns < 1) throw new ArgumentOutOfRangeException(nameof(columns), columns, "Must be at least 1.");
-            if (rows < 1) throw new ArgumentOutOfRangeException(nameof(rows), columns, "Must be at least 1.");
+            if (columns < 1) throw new ArgumentOutOfRangeException(nameof(columns), columns, Resources.MustBeAtLeastOne);
+            if (rows < 1) throw new ArgumentOutOfRangeException(nameof(rows), columns, Resources.MustBeAtLeastOne);
         }
+        #endregion
 
         public string Name { get; }
-        public int Columns => OnMatrix.GetLength(1);
-        public int Rows => OnMatrix.GetLength(0);
-        public SwitchState[,] OnMatrix { get; }
-        
+        public int Columns => Matrix.GetLength(1);
+        public int Rows => Matrix.GetLength(0);
+
+        internal SwitchState[,] Matrix { get; }
+        public SwitchState this[Position position] => Matrix[position.Row, position.Column];
+
+        #region Equality
         private bool Equals(Level other)
         {
-            return string.Equals(Name, other.Name) 
-                && Columns == other.Columns 
-                && Rows == other.Rows 
-                && OnMatrix.MatrixEquals(other.OnMatrix);
+            return string.Equals(Name, other.Name)
+                && Columns == other.Columns
+                && Rows == other.Rows
+                && Matrix.MatrixEquals(other.Matrix);
         }
-        
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -70,11 +76,15 @@ namespace LightsOut
             unchecked
             {
                 var hashCode = (Name != null ? Name.GetHashCode() : 0b0);
-                hashCode = (hashCode * magic) ^ Columns;
-                hashCode = (hashCode * magic) ^ Rows;
-                hashCode = (hashCode * magic) ^ (OnMatrix != null ? OnMatrix.GetHashCode() : 0b0);
+                hashCode = (hashCode * magic) ^ (Matrix != null ? Matrix.GetHashCode() : 0b0);
                 return hashCode;
             }
+        }
+        #endregion
+
+        public override string ToString()
+        {
+            return $"{Name} [{GetHashCode()}]";
         }
     }
 }

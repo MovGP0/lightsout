@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace LightsOut
 {
@@ -10,9 +9,9 @@ namespace LightsOut
         {
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
-            if (DataContext is LightsOutGameViewModel model)
+            if (DataContext is LightsOutGameViewModel viewModel)
             {
-                SetupWithModel(model);
+                SetupWithViewModel(viewModel);
             }
         }
 
@@ -23,79 +22,36 @@ namespace LightsOut
                 oldModel.PropertyChanged -= OnModelChanged;
             }
 
-            if (e.NewValue is LightsOutGameViewModel model)
+            if (e.NewValue is LightsOutGameViewModel viewModel)
             {
-                SetupWithModel(model);
+                SetupWithViewModel(viewModel);
             }
         }
 
-        private void SetupWithModel(LightsOutGameViewModel model)
+        private void SetupWithViewModel(LightsOutGameViewModel viewModel)
         {
-            model.PropertyChanged += OnModelChanged;
-            model.Levels = LevelsLoader.GetLevels();
-            Initialize(model);
+            viewModel.PropertyChanged += OnModelChanged;
+            viewModel.Levels = LevelsLoader.GetLevels();
+            Initialize(viewModel);
         }
 
         private void OnModelChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (sender is LightsOutGameViewModel model)
-                Initialize(model);
+            if (sender is LightsOutGameViewModel viewModel)
+                Initialize(viewModel);
         }
 
-        public void Initialize(LightsOutGameViewModel model)
+        public void Initialize(LightsOutGameViewModel viewModel)
         {
             GameGrid.Children.Clear();
 
-            var rows = model.CurrentLevelState.Rows;
-            SetupRowDefinitions(GameGrid, rows);
+            var rows = viewModel.CurrentLevelState.Rows;
+            GameGrid.SetupRowDefinitions(rows);
 
-            var columns = model.CurrentLevelState.Columns;
-            SetupColumnDefinitions(GameGrid, columns);
+            var columns = viewModel.CurrentLevelState.Columns;
+            GameGrid.SetupColumnDefinitions(columns);
 
-            var grid = GameGrid;
-
-            PopulizeWithSwitches(grid, model.CurrentLevelState);
-        }
-
-        private void PopulizeWithSwitches(Panel panel, Level level)
-        {
-            for (var row = 0; row < level.Rows; row++)
-            for (var column = 0; column < level.Columns; column++)
-            {
-                var @switch = new Switch
-                {
-                    State = level.OnMatrix[row, column],
-                    Style = (Style)FindResource("SwitchStyle")
-                };
-                @switch.SetValue(Grid.RowProperty, row);
-                @switch.SetValue(Grid.ColumnProperty, column);
-                
-                panel.Children.Add(@switch);
-            }
-        }
-
-        private static void SetupColumnDefinitions(Grid grid, int columns)
-        {
-            grid.ColumnDefinitions.Clear();
-            for (var column = 0; column < columns; column++)
-            {
-                grid.ColumnDefinitions.Add(new ColumnDefinition
-                {
-                    Width = new GridLength(40d)
-                });
-            }
-        }
-
-        private static void SetupRowDefinitions(Grid grid, int rows)
-        {
-            grid.RowDefinitions.Clear();
-            for (var row = 0; row < rows; row++)
-            {
-                grid.RowDefinitions.Add(new RowDefinition
-                {
-                    Height = new GridLength(40d)
-                });
-            }
+            GameGrid.PopulizeWithSwitches(viewModel.CurrentLevelState, FindResource);
         }
     }
 }

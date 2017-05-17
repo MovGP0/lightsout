@@ -59,5 +59,14 @@ namespace LightsOut.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be at least 1..
+        /// </summary>
+        internal static string MustBeAtLeastOne {
+            get {
+                return ResourceManager.GetString("MustBeAtLeastOne", resourceCulture);
+            }
+        }
     }
 }
