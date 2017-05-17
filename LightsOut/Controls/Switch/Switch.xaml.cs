@@ -62,11 +62,8 @@ namespace LightsOut
 
             Position = viewModel.Position;
 
-            var stateBinding = new Binding(nameof(viewModel.State)) {Mode = BindingMode.TwoWay};
-            SetBinding(StateProperty, stateBinding);
-
-            var positionBinding = new Binding(nameof(viewModel.Position)) {Mode = BindingMode.TwoWay};
-            SetBinding(PositionProperty, positionBinding);
+            SetBinding(StateProperty, new Binding(nameof(viewModel.State)) { Mode = BindingMode.TwoWay });
+            SetBinding(PositionProperty, new Binding(nameof(viewModel.Position)) { Mode = BindingMode.TwoWay });
         }
         
         private void OnMouseDown(object sender, MouseButtonEventArgs e)

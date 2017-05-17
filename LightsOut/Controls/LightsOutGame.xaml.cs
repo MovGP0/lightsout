@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Media;
 using MoreLinq;
 using Serilog;
@@ -47,19 +48,20 @@ namespace LightsOut
         public LightsOutGame()
         {
             InitializeComponent();
-            DataContextChanged += OnDataContextChanged;
+            DataContextChanged += HandleDataContextChanged;
             if (DataContext is LightsOutGameViewModel viewModel)
             {
                 SetupWithViewModel(viewModel);
             }
         }
 
-        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void HandleDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             Log.Information("Setting Data Context");
 
             if (e.OldValue is LightsOutGameViewModel oldModel)
             {
+                BindingOperations.ClearBinding(this, IsWonProperty);
                 oldModel.PropertyChanged -= HandleViewModelPropertyChanged;
                 oldModel.SwitchViewModels.CollectionChanged -= HandleSwitchViewModelCollectionChanged;
             }
@@ -74,6 +76,8 @@ namespace LightsOut
         {
             viewModel.PropertyChanged += HandleViewModelPropertyChanged;
             viewModel.SwitchViewModels.CollectionChanged += HandleSwitchViewModelCollectionChanged;
+
+            SetBinding(IsWonProperty, new Binding(nameof(viewModel.IsGameWon)) {Mode = BindingMode.TwoWay});
 
             viewModel.Levels.Clear();
             LevelsLoader.GetLevels().ForEach(viewModel.Levels.Add);

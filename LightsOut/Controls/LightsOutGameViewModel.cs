@@ -20,6 +20,7 @@ namespace LightsOut
         private int _currentLevelNumber;
         private int _columns;
         private int _rows;
+        private bool _isGameWon;
 
         public LightsOutGameViewModel()
         {
@@ -100,7 +101,18 @@ namespace LightsOut
                 OnPropertyChanged();
             }
         }
-        
+
+        public bool IsGameWon
+        {
+            get => _isGameWon;
+            set
+            {
+                if (value == _isGameWon) return;
+                _isGameWon = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand RestartCommand { get; }
         
         private void Reset()
@@ -172,6 +184,13 @@ namespace LightsOut
                 svm.Switch8Position();
                 RegisterSwitchViewModel(svm);
             });
+
+            IsGameWon = AreAllSwitchesOff(SwitchViewModels);
+        }
+
+        public bool AreAllSwitchesOff(IEnumerable<SwitchViewModel> switchViewModels)
+        {
+            return switchViewModels.All(svm => svm.State == SwitchState.Off);
         }
 
         private void UnregisterSwitchViewModel(SwitchViewModel @switch)
