@@ -12,7 +12,7 @@
     <UserControl.Content>
         <StackPanel DataContext="{Binding ElementName='Self'}">
             <Grid x:Name="GameGrid" Height="Auto" Width="Auto" Background="{Binding GameBackground}" />
-            <Grid x:Name="foobar">
+            <Grid x:Name="InfoBar">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
@@ -20,8 +20,14 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0" FontSize="60" Text="{Binding ViewModel.CurrentLevelNumber}" FontFamily="Source Sans Pro" />
-                <TextBlock Grid.Column="1" Grid.Row="0" FontSize="60" Text="{Binding ViewModel.MoveCounter}" FontFamily="Source Sans Pro" />
+                <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" FlowDirection="LeftToRight" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <UserControl Content="{StaticResource Trophy}" />
+                    <TextBlock Padding="0,15,0,0" FontSize="60" TextAlignment="Right" Text="{Binding ViewModel.CurrentLevelNumber}" FontFamily="Source Sans Pro" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" FlowDirection="LeftToRight" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <UserControl Content="{StaticResource SwitchNeutral}" />
+                    <TextBlock Padding="0,15,0,0" FontSize="60" TextAlignment="Right" Text="{Binding ViewModel.MoveCounter}" FontFamily="Source Sans Pro" />
+                </StackPanel>
             </Grid>
         </StackPanel>
     </UserControl.Content>
