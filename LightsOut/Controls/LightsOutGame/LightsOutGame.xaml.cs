@@ -137,5 +137,15 @@ namespace LightsOut
                 GameGrid.Children.Add(@switch);
             }
         }
+
+        private void OnNextLevelButtonClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.NextLevel();
+        }
+
+        private void OnResetLevelButtonClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.Restart();
+        }
     }
 }

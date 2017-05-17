@@ -26,14 +26,12 @@
                     <Grid.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Grid.Background>
-
-                    <Border  Grid.Row="1" Grid.Column="0"  Background="{StaticResource WonGameBackgroundBrush}" Width="{Binding ElementName=GameGrid, Path=Width}" Padding="15">
-                        <TextBlock TextAlignment="Center" HorizontalAlignment="Center"
-                                   Text="YOU WIN THIS BATTLE…"
-                                   FontSize="30" 
-                                   Foreground="{StaticResource WonGameForegroundBrush}"
-                        />
-                    </Border>
+                    <Button x:Name="NextLevelButton" Grid.Row="1" Grid.Column="0" Click="OnNextLevelButtonClick">
+                        <Border Background="{StaticResource WonGameBackgroundBrush}" Width="{Binding ElementName=GameGrid, Path=Width}" Padding="15">
+                            <TextBlock TextAlignment="Center" HorizontalAlignment="Center"
+                                   Text="YOU WIN THIS BATTLE…" FontSize="30" Foreground="{StaticResource WonGameForegroundBrush}" />
+                        </Border>
+                    </Button>
                 </Grid>
                 <Grid x:Name="GameGrid" Height="Auto" Width="Auto" Background="{Binding GameBackground}"
                       d:DesignHeight="800"
@@ -51,10 +49,12 @@
                     <UserControl Content="{StaticResource Trophy}" />
                     <TextBlock Padding="0,15,0,0" FontSize="60" TextAlignment="Right" Text="{Binding ViewModel.CurrentLevelNumber}" FontFamily="Source Sans Pro" />
                 </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" FlowDirection="LeftToRight" HorizontalAlignment="Center" Orientation="Horizontal">
-                    <UserControl Content="{StaticResource SwitchNeutral}" />
-                    <TextBlock Padding="0,15,0,0" FontSize="60" TextAlignment="Right" Text="{Binding ViewModel.MoveCounter}" FontFamily="Source Sans Pro" />
-                </StackPanel>
+                <Button x:Name="ResetLevelButton" Grid.Column="1" Grid.Row="0" Background="{StaticResource BackgroundBrush}" Foreground="{StaticResource ForegroundBrush}" BorderThickness="0" BorderBrush="Transparent" Click="OnResetLevelButtonClick">
+                    <StackPanel VerticalAlignment="Center" FlowDirection="LeftToRight" HorizontalAlignment="Center" Orientation="Horizontal">
+                        <UserControl Content="{StaticResource SwitchNeutral}" />
+                        <TextBlock Padding="0,15,0,0" FontSize="60" TextAlignment="Right" Text="{Binding ViewModel.MoveCounter}" FontFamily="Source Sans Pro" />
+                    </StackPanel>
+                </Button>
             </Grid>
         </StackPanel>
     </UserControl.Content>

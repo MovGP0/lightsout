@@ -212,5 +212,15 @@ namespace LightsOut
 
             Set8PosSwitches(args.Position, args.State);
         }
+
+        public void NextLevel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Restart()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

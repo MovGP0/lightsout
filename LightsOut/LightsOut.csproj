@@ -72,8 +72,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\GridExtensions.cs" />
-    <Compile Include="Controls\LightsOutGame.xaml.cs">
+    <Compile Include="Controls\LightsOutGame\GridExtensions.cs" />
+    <Compile Include="Controls\LightsOutGame\LightsOutGame.xaml.cs">
       <DependentUpon>LightsOutGame.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\NotifyPropertyChanged.cs" />
@@ -88,7 +88,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\LightsOutGame.xaml">
+    <Page Include="Controls\LightsOutGame\LightsOutGame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -101,12 +101,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\Switch\SwitchStateChangedEventArgs.cs" />
-    <Compile Include="Levels\LightsOutGameModel.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="Levels\LevelExtensions.cs" />
     <Compile Include="Levels\LevelsLoader.cs" />
     <Compile Include="Levels\MatrixExtensions.cs" />
-    <Compile Include="Controls\LightsOutGameViewModel.cs" />
+    <Compile Include="Controls\LightsOutGame\LightsOutGameViewModel.cs" />
     <Compile Include="Levels\Position.cs" />
     <Compile Include="Controls\Switch\SwitchViewModel.cs" />
     <Compile Include="Levels\PositionExtensions.cs" />
