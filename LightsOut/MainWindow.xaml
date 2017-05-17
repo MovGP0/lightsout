@@ -14,8 +14,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <local:LightsOutGame>
-            </local:LightsOutGame>
+            <local:LightsOutGame Style="{StaticResource LightsOutGameStyle}" />
         </Grid>
         <!-- Bottom -->
     </Grid>

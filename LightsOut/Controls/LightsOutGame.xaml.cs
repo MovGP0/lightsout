@@ -34,6 +34,14 @@ namespace LightsOut
             set => SetValue(IsWonProperty, value);
         }
 
+        public static readonly DependencyProperty WinMessageVisibilityProperty = DependencyProperty.Register(
+            nameof(WinMessageVisibility), typeof(Visibility), typeof(LightsOutGame), new PropertyMetadata(Visibility.Collapsed));
+
+        public Visibility WinMessageVisibility
+        {
+            get => (Visibility) GetValue(WinMessageVisibilityProperty);
+            set => SetValue(WinMessageVisibilityProperty, value);
+        }
         #endregion
 
         public LightsOutGame()
