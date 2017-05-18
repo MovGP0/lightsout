@@ -48,7 +48,7 @@
                 <Button x:Name="ResetGameButton" Grid.Column="0" Grid.Row="0" Style="{StaticResource MenuButtonStyle}" Click="OnResetGameButtonClick">
                     <StackPanel VerticalAlignment="Center" FlowDirection="LeftToRight" HorizontalAlignment="Center" Orientation="Horizontal">
                         <UserControl Content="{StaticResource Trophy}" />
-                        <TextBlock Padding="0,15,0,0" FontSize="60" TextAlignment="Right" Text="{Binding ViewModel.CurrentLevelNumber}" FontFamily="Source Sans Pro" />
+                        <TextBlock Padding="0,15,0,0" FontSize="60" TextAlignment="Right" Text="{Binding ViewModel.NumberOfWonGames}" FontFamily="Source Sans Pro" />
                     </StackPanel>
                 </Button>
                 <Button x:Name="ResetLevelButton" Grid.Column="1" Grid.Row="0" Style="{StaticResource MenuButtonStyle}" Click="OnResetLevelButtonClick">

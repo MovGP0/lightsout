@@ -21,6 +21,7 @@ namespace LightsOut
         private int _columns;
         private int _rows;
         private bool _isGameWon;
+        private int _numberOfWonGames;
 
         public LightsOutGameViewModel()
         {
@@ -57,7 +58,18 @@ namespace LightsOut
                 Reset();
             }
         }
-        
+
+        public int NumberOfWonGames
+        {
+            get => _numberOfWonGames;
+            set
+            {
+                if (value == _numberOfWonGames) return;
+                _numberOfWonGames = value;
+                OnPropertyChanged();
+            }
+        }
+
         public int CurrentLevelNumber
         {
             get => _currentLevelNumber;
@@ -193,6 +205,10 @@ namespace LightsOut
             });
 
             IsGameWon = AreAllSwitchesOff(SwitchViewModels);
+            if (IsGameWon)
+            {
+                NumberOfWonGames++;
+            }
         }
 
         public bool AreAllSwitchesOff(IEnumerable<SwitchViewModel> switchViewModels)
