@@ -11,7 +11,7 @@ namespace LightsOut
 
         public static void SetupColumnDefinitions(this Grid grid, int columns)
         {
-            Log.Information($"Setting up {columns} ColumnDefinitions.");
+            Log.Verbose($"Setting up {columns} ColumnDefinitions.");
 
             grid.ColumnDefinitions.Clear();
             for (var column = 0; column < columns; column++)
@@ -25,7 +25,7 @@ namespace LightsOut
 
         public static void SetupRowDefinitions(this Grid grid, int rows)
         {
-            Log.Information($"Setting up {rows} RowDefinitions.");
+            Log.Verbose($"Setting up {rows} RowDefinitions.");
 
             grid.RowDefinitions.Clear();
             for (var row = 0; row < rows; row++)

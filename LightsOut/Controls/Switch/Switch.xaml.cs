@@ -58,7 +58,7 @@ namespace LightsOut
             where T:ISwitch, INotifyPropertyChanged
         {
             if (viewModel == null) return;
-            Log.Information("Initializing Bindings");
+            Log.Verbose("Initializing Bindings");
 
             Position = viewModel.Position;
 

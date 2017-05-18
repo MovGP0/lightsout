@@ -34,7 +34,7 @@ namespace LightsOut
                 if (value.Equals(_position)) return;
                 _position = value;
 
-                Log.Information("Position changed");
+                Log.Verbose("Position changed");
                 OnPropertyChanged();
             }
         }
@@ -47,7 +47,7 @@ namespace LightsOut
                 if (value == _state) return;
                 _state = value;
 
-                Log.Information("State changed");
+                Log.Verbose("State changed");
                 OnPropertyChanged();
             }
         }

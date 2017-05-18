@@ -117,7 +117,7 @@ namespace LightsOut
         
         private void Reset()
         {
-            Log.Information("Resetting LightsOutGameViewModel");
+            Log.Verbose("Resetting LightsOutGameViewModel");
 
             if (CurrentLevelNumber+1 > Levels.Count)
             {
@@ -153,14 +153,14 @@ namespace LightsOut
                 return;
             }
 
-            Log.Information($"Setting Level {number}");
+            Log.Verbose($"Setting Level {number}");
 
             SwitchViewModels.ToList().ForEach(item => SwitchViewModels.Remove(item));
 
             var level = Levels[number];
             level.GetAllPositions().ForEach(position =>
             {
-                Log.Information("adding switch model");
+                Log.Verbose("adding switch model");
                 SwitchViewModels.Add(new SwitchViewModel
                 {
                     State = level[position], 
@@ -178,7 +178,7 @@ namespace LightsOut
         {
             if(state == SwitchState.OffPressed || state == SwitchState.OnPressed) return;
 
-            Log.Information("Setting 8 Positions");
+            Log.Verbose("Setting 8 Positions");
             var positions = position.Get9Positions()
                 .Where(pos => pos.IsInBounds(Rows, Columns))
                 .Where(pos => pos != position);
@@ -222,20 +222,20 @@ namespace LightsOut
 
         public void NextLevel()
         {
-            Log.Warning("Setting next level");
+            Log.Information("Setting next level");
             var nextLevelNumber = CurrentLevelNumber + 1;
             SetLevel(nextLevelNumber);
         }
 
         public void ResetLevel()
         {
-            Log.Warning("Resetting level");
+            Log.Information("Resetting level");
             SetLevel(CurrentLevelNumber);
         }
 
         public void ResetGame()
         {
-            Log.Warning("Resetting game");
+            Log.Information("Resetting game");
             SetLevel(0);
         }
     }

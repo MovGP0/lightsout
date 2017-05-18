@@ -57,7 +57,7 @@ namespace LightsOut
 
         private void HandleDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            Log.Information("Setting Data Context");
+            Log.Verbose("Setting Data Context");
 
             if (e.OldValue is LightsOutGameViewModel oldModel)
             {
@@ -99,7 +99,7 @@ namespace LightsOut
 
         public void Initialize(LightsOutGameViewModel viewModel)
         {
-            Log.Information("Initializing LightsOutGame");
+            Log.Verbose("Initializing LightsOutGame");
             GameGrid.Children.Clear();
 
             viewModel.SetLevel(0);
@@ -113,14 +113,14 @@ namespace LightsOut
 
         private void HandleSwitchViewModelCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            Log.Information("Handle switches changed");
+            Log.Verbose("Handle switches changed");
 
             var switches = GameGrid.Children.OfType<Switch>().ToArray();
             var oldItems = e.OldItems ?? new ReadOnlyCollection<SwitchViewModel>(new List<SwitchViewModel>());
             foreach (var item in oldItems)
             {
                 var switchViewModel = item as SwitchViewModel;
-                Log.Information($"Removing old switch at {switchViewModel.Position}");
+                Log.Verbose($"Removing old switch at {switchViewModel.Position}");
 
                 var switchToRemove = switches.SingleOrDefault(s => s.Position.Equals(switchViewModel.Position));
                 if (switchToRemove == null) continue;
@@ -131,7 +131,7 @@ namespace LightsOut
             foreach (var item in newItems)
             {
                 var switchViewModel = item as SwitchViewModel;
-                Log.Information($"Adding new switch at {switchViewModel.Position}");
+                Log.Verbose($"Adding new switch at {switchViewModel.Position}");
 
                 var @switch = switchViewModel.CreateSwitch(FindResource);
                 GameGrid.Children.Add(@switch);
