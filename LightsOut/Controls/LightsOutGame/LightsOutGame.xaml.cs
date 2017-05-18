@@ -79,7 +79,7 @@ namespace LightsOut
 
             SetBinding(IsWonProperty, new Binding(nameof(viewModel.IsGameWon)) {Mode = BindingMode.TwoWay});
 
-            viewModel.Levels.Clear();
+            viewModel.Levels.ToList().ForEach(level => viewModel.Levels.Remove(level));
             LevelsLoader.GetLevels().ForEach(viewModel.Levels.Add);
             Initialize(viewModel);
         }

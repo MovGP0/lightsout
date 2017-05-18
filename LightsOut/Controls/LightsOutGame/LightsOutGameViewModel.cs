@@ -128,7 +128,7 @@ namespace LightsOut
             Rows = currentLevel.Rows;
             Columns = currentLevel.Columns;
 
-            SwitchViewModels.Clear();
+            SwitchViewModels.ToList().ForEach(item => SwitchViewModels.Remove(item));
 
             currentLevel.GetAllPositions().ForEach(pos =>
             {
@@ -147,11 +147,16 @@ namespace LightsOut
         {
             if(Levels.Count == 0) throw new InvalidOperationException("Levels not initialized");
             if(number < 0) throw new ArgumentOutOfRangeException("Must not be negative.");
-            if(number >= Levels.Count) throw new ArgumentOutOfRangeException("Must not be greater that the number of loaded levels.");
+            if(number >= Levels.Count)
+            {
+                SetLevel(0);
+                return;
+            }
 
             Log.Information($"Setting Level {number}");
 
-            SwitchViewModels.Clear();
+            SwitchViewModels.ToList().ForEach(item => SwitchViewModels.Remove(item));
+
             var level = Levels[number];
             level.GetAllPositions().ForEach(position =>
             {
@@ -165,6 +170,8 @@ namespace LightsOut
 
             Rows = level.Rows;
             Columns = level.Columns;
+            CurrentLevelNumber = number;
+            IsGameWon = AreAllSwitchesOff(SwitchViewModels);
         }
 
         private void Set8PosSwitches(Position position, SwitchState state)
@@ -215,17 +222,21 @@ namespace LightsOut
 
         public void NextLevel()
         {
-            throw new NotImplementedException();
+            Log.Warning("Setting next level");
+            var nextLevelNumber = CurrentLevelNumber + 1;
+            SetLevel(nextLevelNumber);
         }
 
         public void ResetLevel()
         {
-            throw new NotImplementedException();
+            Log.Warning("Resetting level");
+            SetLevel(CurrentLevelNumber);
         }
 
         public void ResetGame()
         {
-            throw new NotImplementedException();
+            Log.Warning("Resetting game");
+            SetLevel(0);
         }
     }
 }
