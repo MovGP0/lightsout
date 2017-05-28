@@ -61,6 +61,16 @@ namespace LightsOut.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] lights_out_levels {
+            get {
+                object obj = ResourceManager.GetObject("lights_out_levels", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Must be at least 1..
         /// </summary>
         internal static string MustBeAtLeastOne {

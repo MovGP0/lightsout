@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Net;
+#if DEBUG
 using System.Linq;
+#endif
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using LightsOut.Properties;
 using Newtonsoft.Json;
 
 namespace LightsOut
@@ -44,6 +48,12 @@ namespace LightsOut
             {
                 var result = await client.GetAsync(uri, token)
                     .ConfigureAwait(false);
+
+                if (result.StatusCode != HttpStatusCode.OK)
+                {
+                    return Encoding.Default.GetString(Resources.lights_out_levels);
+                }
+
                 return await result.Content.ReadAsStringAsync();
             }
         }
