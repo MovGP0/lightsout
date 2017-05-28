@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Serilog;
@@ -44,18 +43,18 @@ namespace LightsOut
             BindingOperations.ClearBinding(this, StateProperty);
             BindingOperations.ClearBinding(this, PositionProperty);
 
-            if (e.OldValue is SwitchViewModel oldViewModel)
+            if (e.OldValue is ISwitchViewModel oldViewModel)
             {
             }
 
-            if (e.NewValue is SwitchViewModel viewModel)
+            if (e.NewValue is ISwitchViewModel viewModel)
             {
                 InitializeBindingsToViewModel(viewModel);
             }
         }
 
         private void InitializeBindingsToViewModel<T>(T viewModel)
-            where T:ISwitchViewModel, INotifyPropertyChanged
+            where T:ISwitchViewModel
         {
             if (viewModel == null) return;
             Log.Verbose("Initializing Bindings");
@@ -76,9 +75,9 @@ namespace LightsOut
             ViewModel?.ReleaseSwitch();
         }
 
-        public SwitchViewModel ViewModel
+        public ISwitchViewModel ViewModel
         {
-            get => DataContext as SwitchViewModel;
+            get => DataContext as ISwitchViewModel;
             set => DataContext = value;
         }
     }

@@ -114,10 +114,11 @@ namespace LightsOut
             Log.Verbose("Handle switches changed");
 
             var switches = GameGrid.Children.OfType<Switch>().ToArray();
-            var oldItems = e.OldItems ?? new ReadOnlyCollection<SwitchViewModel>(new List<SwitchViewModel>());
+            var oldItems = e.OldItems ?? new ReadOnlyCollection<ISwitchViewModel>(new List<ISwitchViewModel>());
             foreach (var item in oldItems)
             {
-                var switchViewModel = item as SwitchViewModel;
+                var switchViewModel = item as ISwitchViewModel;
+                if(switchViewModel == null) continue;
                 Log.Verbose($"Removing old switch at {switchViewModel.Position}");
 
                 var switchToRemove = switches.SingleOrDefault(s => s.Position.Equals(switchViewModel.Position));
@@ -125,10 +126,11 @@ namespace LightsOut
                 GameGrid.Children.Remove(switchToRemove);
             }
 
-            var newItems = e.NewItems ?? new ReadOnlyCollection<SwitchViewModel>(new List<SwitchViewModel>());
+            var newItems = e.NewItems ?? new ReadOnlyCollection<ISwitchViewModel>(new List<ISwitchViewModel>());
             foreach (var item in newItems)
             {
-                var switchViewModel = item as SwitchViewModel;
+                var switchViewModel = item as ISwitchViewModel;
+                if(switchViewModel == null) continue;
                 Log.Verbose($"Adding new switch at {switchViewModel.Position}");
 
                 var @switch = switchViewModel.CreateSwitch(FindResource);

@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using LightsOut.Properties;
 using MoreLinq;
 using Serilog;
 
@@ -35,17 +36,17 @@ namespace LightsOut
 
         private void HandleSwitchViewModelCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var oldItems = e.OldItems ?? new List<SwitchViewModel>(0);
+            var oldItems = e.OldItems ?? new List<ISwitchViewModel>(0);
             foreach (var oldItem in oldItems)
             {
-                var svm = (SwitchViewModel)oldItem;
+                var svm = (ISwitchViewModel)oldItem;
                 UnregisterSwitchViewModel(svm);
             }
 
-            var newItems = e.NewItems ?? new List<SwitchViewModel>(0);
+            var newItems = e.NewItems ?? new List<ISwitchViewModel>(0);
             foreach (var newItem in newItems)
             {
-                var svm = (SwitchViewModel)newItem;
+                var svm = (ISwitchViewModel)newItem;
                 RegisterSwitchViewModel(svm);
             }
         }
@@ -130,12 +131,12 @@ namespace LightsOut
         }
 
         public ICommand RestartCommand { get; }
-        
+
         private void Reset()
         {
             Log.Verbose("Resetting LightsOutGameViewModel");
 
-            if (CurrentLevelNumber+1 > Levels.Count)
+            if (CurrentLevelNumber + 1 > Levels.Count)
             {
                 CurrentLevelNumber = 0;
             }
@@ -153,15 +154,15 @@ namespace LightsOut
                 switchViewModel.State = currentLevel[pos];
                 SwitchViewModels.Add(switchViewModel);
             });
-            
+
             MoveCounter = 0;
         }
 
         public void SetLevel(int number)
         {
-            if(Levels.Count == 0) throw new InvalidOperationException("Levels not initialized");
-            if(number < 0) throw new ArgumentOutOfRangeException("Must not be negative.");
-            if(number >= Levels.Count)
+            if (Levels.Count == 0) throw new InvalidOperationException(Resources.LevelsNotInitialized);
+            if (number < 0) throw new ArgumentOutOfRangeException(nameof(number), Resources.MustNotBeNegative);
+            if (number >= Levels.Count)
             {
                 SetLevel(0);
                 return;
@@ -175,11 +176,12 @@ namespace LightsOut
             level.GetAllPositions().ForEach(position =>
             {
                 Log.Verbose("adding switch model");
-                SwitchViewModels.Add(new SwitchViewModel
-                {
-                    State = level[position], 
-                    Position = position
-                });
+
+                var switchViewModel = SwitchViewModelFactory();
+                switchViewModel.State = level[position];
+                switchViewModel.Position = position;
+
+                SwitchViewModels.Add(switchViewModel);
             });
 
             Rows = level.Rows;
@@ -190,18 +192,18 @@ namespace LightsOut
 
         private void Set8PosSwitches(Position position, SwitchState state)
         {
-            if(state == SwitchState.OffPressed || state == SwitchState.OnPressed) return;
+            if (state == SwitchState.OffPressed || state == SwitchState.OnPressed) return;
 
             Log.Verbose("Setting 8 Positions");
             var positions = position.Get9Positions()
                 .Where(pos => pos.IsInBounds(Rows, Columns))
                 .Where(pos => pos != position);
-            
+
             var switchViewModels = SwitchViewModels.Where(svm => positions.Contains(svm.Position));
             switchViewModels.ForEach(svm =>
             {
-                // temp. unregister event handler to prevent endless loop
-                UnregisterSwitchViewModel(svm);
+            // temp. unregister event handler to prevent endless loop
+            UnregisterSwitchViewModel(svm);
                 svm.Switch8Position();
                 RegisterSwitchViewModel(svm);
             });

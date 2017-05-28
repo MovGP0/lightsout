@@ -124,4 +124,10 @@
   <data name="MustBeAtLeastOne" xml:space="preserve">
     <value>Must be at least 1.</value>
   </data>
+  <data name="MustNotBeNegative" xml:space="preserve">
+    <value>Must not be negative.</value>
+  </data>
+  <data name="LevelsNotInitialized" xml:space="preserve">
+    <value>Levels not initialized</value>
+  </data>
 </root>

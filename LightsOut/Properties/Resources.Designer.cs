@@ -61,6 +61,15 @@ namespace LightsOut.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Levels not initialized.
+        /// </summary>
+        internal static string LevelsNotInitialized {
+            get {
+                return ResourceManager.GetString("LevelsNotInitialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] lights_out_levels {
@@ -76,6 +85,15 @@ namespace LightsOut.Properties {
         internal static string MustBeAtLeastOne {
             get {
                 return ResourceManager.GetString("MustBeAtLeastOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must not be negative..
+        /// </summary>
+        internal static string MustNotBeNegative {
+            get {
+                return ResourceManager.GetString("MustNotBeNegative", resourceCulture);
             }
         }
     }

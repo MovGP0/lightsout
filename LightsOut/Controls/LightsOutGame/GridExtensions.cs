@@ -37,7 +37,7 @@ namespace LightsOut
             }
         }
 
-        public static Switch CreateSwitch(this SwitchViewModel switchViewModel, Func<string, object> findResource)
+        public static Switch CreateSwitch(this ISwitchViewModel switchViewModel, Func<string, object> findResource)
         {
             var @switch = new Switch
             {
