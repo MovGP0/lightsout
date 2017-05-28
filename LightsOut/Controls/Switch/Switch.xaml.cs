@@ -55,7 +55,7 @@ namespace LightsOut
         }
 
         private void InitializeBindingsToViewModel<T>(T viewModel)
-            where T:ISwitch, INotifyPropertyChanged
+            where T:ISwitchViewModel, INotifyPropertyChanged
         {
             if (viewModel == null) return;
             Log.Verbose("Initializing Bindings");

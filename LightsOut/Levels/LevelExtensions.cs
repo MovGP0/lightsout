@@ -21,7 +21,7 @@ namespace LightsOut
             }
         }
         
-        public static void Switch8Position(this SwitchViewModel viewModel)
+        public static void Switch8Position(this ISwitchViewModel viewModel)
         {
             var currentState = viewModel.State;
             switch (currentState)

@@ -4,7 +4,7 @@ using Serilog;
 
 namespace LightsOut
 {
-    public sealed class SwitchViewModel : NotifyPropertyChanged, ISwitch
+    public sealed class SwitchViewModel : NotifyPropertyChanged, ISwitchViewModel
     {
         private static ILogger Log => Serilog.Log.Logger.ForContext<SwitchViewModel>();
 
@@ -52,14 +52,22 @@ namespace LightsOut
             }
         }
 
+        private readonly object _switchCommandLockObject = new object();
+
         public void PressSwitch()
         {
-            PressSwitchCommand.Execute(this);
+            lock (_switchCommandLockObject)
+            {
+                PressSwitchCommand.Execute(this);
+            }
         }
 
         public void ReleaseSwitch()
         {
-            ReleaseSwitchCommand.Execute(this);
+            lock (_switchCommandLockObject)
+            {
+                ReleaseSwitchCommand.Execute(this);
+            }
         }
 
         private PressSwitchCommand PressSwitchCommand { get; } = new PressSwitchCommand();

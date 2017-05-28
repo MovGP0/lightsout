@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using MoreLinq;
 using Serilog;
 
 namespace LightsOut
@@ -49,7 +48,7 @@ namespace LightsOut
         {
             InitializeComponent();
             DataContextChanged += HandleDataContextChanged;
-            if (DataContext is LightsOutGameViewModel viewModel)
+            if (DataContext is ILightsOutGameViewModel viewModel)
             {
                 SetupWithViewModel(viewModel);
             }
@@ -59,45 +58,44 @@ namespace LightsOut
         {
             Log.Verbose("Setting Data Context");
 
-            if (e.OldValue is LightsOutGameViewModel oldModel)
+            if (e.OldValue is ILightsOutGameViewModel oldModel)
             {
                 BindingOperations.ClearBinding(this, IsWonProperty);
                 oldModel.PropertyChanged -= HandleViewModelPropertyChanged;
                 oldModel.SwitchViewModels.CollectionChanged -= HandleSwitchViewModelCollectionChanged;
             }
 
-            if (e.NewValue is LightsOutGameViewModel viewModel)
+            if (e.NewValue is ILightsOutGameViewModel viewModel)
             {
                 SetupWithViewModel(viewModel);
             }
         }
 
-        private void SetupWithViewModel(LightsOutGameViewModel viewModel)
+        private void SetupWithViewModel(ILightsOutGameViewModel viewModel)
         {
             viewModel.PropertyChanged += HandleViewModelPropertyChanged;
             viewModel.SwitchViewModels.CollectionChanged += HandleSwitchViewModelCollectionChanged;
 
             SetBinding(IsWonProperty, new Binding(nameof(viewModel.IsGameWon)) {Mode = BindingMode.TwoWay});
 
-            viewModel.Levels.ToList().ForEach(level => viewModel.Levels.Remove(level));
-            LevelsLoader.GetLevels().ForEach(viewModel.Levels.Add);
+            viewModel.Setup();
             Initialize(viewModel);
         }
 
-        public LightsOutGameViewModel ViewModel
+        public ILightsOutGameViewModel ViewModel
         {
-            get => DataContext as LightsOutGameViewModel;
+            get => DataContext as ILightsOutGameViewModel;
             set => DataContext = value;
         }
 
         private void HandleViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (sender is LightsOutGameViewModel viewModel)
+            if (sender is ILightsOutGameViewModel viewModel)
             {
             }
         }
 
-        public void Initialize(LightsOutGameViewModel viewModel)
+        public void Initialize(ILightsOutGameViewModel viewModel)
         {
             Log.Verbose("Initializing LightsOutGame");
             GameGrid.Children.Clear();

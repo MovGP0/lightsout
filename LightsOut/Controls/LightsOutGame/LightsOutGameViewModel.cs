@@ -10,11 +10,13 @@ using Serilog;
 
 namespace LightsOut
 {
-    public sealed class LightsOutGameViewModel : NotifyPropertyChanged
+    public sealed class LightsOutGameViewModel : NotifyPropertyChanged, ILightsOutGameViewModel
     {
         private static ILogger Log => Serilog.Log.Logger.ForContext<LightsOutGameViewModel>();
-        public ObservableCollection<SwitchViewModel> SwitchViewModels { get; } = new ObservableCollection<SwitchViewModel>();
+        public ObservableCollection<ISwitchViewModel> SwitchViewModels { get; } = new ObservableCollection<ISwitchViewModel>();
         public Collection<Level> Levels { get; } = new Collection<Level>();
+        private ILevelsLoader LevelsLoader { get; }
+        private Func<ISwitchViewModel> SwitchViewModelFactory { get; }
 
         private int _moveCounter;
         private int _currentLevelNumber;
@@ -23,8 +25,10 @@ namespace LightsOut
         private bool _isGameWon;
         private int _numberOfWonGames;
 
-        public LightsOutGameViewModel()
+        public LightsOutGameViewModel(ILevelsLoader levelsLoader, Func<ISwitchViewModel> switchViewModelFactory)
         {
+            LevelsLoader = levelsLoader;
+            SwitchViewModelFactory = switchViewModelFactory;
             PropertyChanged += HandlePropertyChanged;
             SwitchViewModels.CollectionChanged += HandleSwitchViewModelCollectionChanged;
         }
@@ -144,11 +148,9 @@ namespace LightsOut
 
             currentLevel.GetAllPositions().ForEach(pos =>
             {
-                var switchViewModel = new SwitchViewModel
-                {
-                    Position = pos, 
-                    State = currentLevel[pos]
-                };
+                var switchViewModel = SwitchViewModelFactory();
+                switchViewModel.Position = pos;
+                switchViewModel.State = currentLevel[pos];
                 SwitchViewModels.Add(switchViewModel);
             });
             
@@ -211,19 +213,19 @@ namespace LightsOut
             }
         }
 
-        public bool AreAllSwitchesOff(IEnumerable<SwitchViewModel> switchViewModels)
+        public bool AreAllSwitchesOff(IEnumerable<ISwitchViewModel> switchViewModels)
         {
             return switchViewModels.All(svm => svm.State == SwitchState.Off);
         }
 
-        private void UnregisterSwitchViewModel(SwitchViewModel @switch)
+        private void UnregisterSwitchViewModel(ISwitchViewModel switchViewModel)
         {
-            @switch.SwitchStateChanged -= HandleSwitchChanged;
+            switchViewModel.SwitchStateChanged -= HandleSwitchChanged;
         }
 
-        private void RegisterSwitchViewModel(SwitchViewModel @switch)
+        private void RegisterSwitchViewModel(ISwitchViewModel switchViewModel)
         {
-            @switch.SwitchStateChanged += HandleSwitchChanged;
+            switchViewModel.SwitchStateChanged += HandleSwitchChanged;
         }
 
         private void HandleSwitchChanged(object sender, SwitchStateChangedEventArgs args)
@@ -253,6 +255,12 @@ namespace LightsOut
         {
             Log.Information("Resetting game");
             SetLevel(0);
+        }
+
+        public void Setup()
+        {
+            Levels.ToList().ForEach(level => Levels.Remove(level));
+            LevelsLoader.GetLevels().ForEach(Levels.Add);
         }
     }
 }

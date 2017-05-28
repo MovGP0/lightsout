@@ -12,11 +12,11 @@ namespace LightsOut
 
         public void Execute(object parameter)
         {
-            if (parameter is ISwitch @switch)
+            if (parameter is ISwitchViewModel @switch)
                 Execute(@switch);
         }
 
-        public void Execute(ISwitch parameter)
+        public void Execute(ISwitchViewModel parameter)
         {
             if (parameter == null)
                 throw new ArgumentNullException(nameof(parameter));

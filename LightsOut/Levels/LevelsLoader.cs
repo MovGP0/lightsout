@@ -13,12 +13,19 @@ using Newtonsoft.Json;
 
 namespace LightsOut
 {
-    public static class LevelsLoader
+    public sealed class LevelsLoader : ILevelsLoader
     {
+        public Func<HttpClient> HttpClientFactory { get; }
+
         private static readonly Uri Url =
             new Uri("https://raw.githubusercontent.com/dranner-bgt/lights-out-assignment/master/levels/lights-out-levels.json");
 
-        public static ICollection<Level> GetLevels()
+        public LevelsLoader(Func<HttpClient> httpClientFactory)
+        {
+            HttpClientFactory = httpClientFactory;
+        }
+
+        public ICollection<Level> GetLevels()
         {
 #if DEBUG
             return GetDebugLevels().ToList();
@@ -33,7 +40,7 @@ namespace LightsOut
             yield return new Level("Level 0", 3, 3, new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
         }
 
-        private static List<Level> LoadLevelsFromGithub()
+        private List<Level> LoadLevelsFromGithub()
         {
             using (var source = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
             {
@@ -42,9 +49,9 @@ namespace LightsOut
             }
         }
 
-        private static async Task<string> DownloadFromUrlAsync(Uri uri, CancellationToken token)
+        private async Task<string> DownloadFromUrlAsync(Uri uri, CancellationToken token)
         {
-            using (var client = new HttpClient())
+            using (var client = HttpClientFactory())
             {
                 var result = await client.GetAsync(uri, token)
                     .ConfigureAwait(false);

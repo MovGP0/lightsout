@@ -37,6 +37,15 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DryIoc, Version=2.10.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DryIoc.dll.2.10.7\lib\net45\DryIoc.dll</HintPath>
+    </Reference>
+    <Reference Include="DryIoc.CommonServiceLocator, Version=2.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DryIoc.CommonServiceLocator.dll.2.2.1\lib\net40-Client\DryIoc.CommonServiceLocator.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="MoreLinq, Version=2.4.20801.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
       <HintPath>..\packages\morelinq.2.4.1\lib\net40\MoreLinq.dll</HintPath>
     </Reference>
@@ -73,17 +82,20 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\LightsOutGame\GridExtensions.cs" />
+    <Compile Include="Controls\LightsOutGame\ILightsOutGameViewModel.cs" />
     <Compile Include="Controls\LightsOutGame\LightsOutGame.xaml.cs">
       <DependentUpon>LightsOutGame.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\NotifyPropertyChanged.cs" />
-    <Compile Include="Controls\Switch\ISwitch.cs" />
+    <Compile Include="Controls\Switch\ISwitchViewModel.cs" />
     <Compile Include="Controls\Switch\PressSwitchCommand.cs" />
     <Compile Include="Controls\Switch\Switch.xaml.cs">
       <DependentUpon>Switch.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Switch\SwitchState.cs" />
     <Compile Include="Controls\Switch\ReleaseSwitchCommand.cs" />
+    <Compile Include="RegistratorExtensions.cs" />
+    <Compile Include="ResourceLocator.cs" />
     <Page Include="Assets\Resources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -101,6 +113,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\Switch\SwitchStateChangedEventArgs.cs" />
+    <Compile Include="DependencyInjectionSetup.cs" />
+    <Compile Include="Levels\ILevelsLoader.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="Levels\LevelExtensions.cs" />
     <Compile Include="Levels\LevelsLoader.cs" />
